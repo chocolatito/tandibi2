@@ -22,6 +22,7 @@
 #  index_users_on_username              (username) UNIQUE
 #
 class User < ApplicationRecord
+  # extract_roles_from :role
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -69,20 +70,20 @@ class User < ApplicationRecord
            source: :user
   # Functions
   before_save :ensure_proper_name_case
-  def name
-    if last_name
-      "#{first_name} #{last_name}"
-    else
-      first_name
-    end
-  end
+  # def name
+  #   if last_name
+  #     "#{first_name} #{last_name}"
+  #   else
+  #     first_name
+  #   end
+  # end
 
-  def profile_picture_url
-    @profile_picture_url ||= begin
-      hash = Digest::MD5.hexdigest(email)
-      "https://www.gravatar.com/avatar/#{hash}?d=wavatar"
-    end
-  end
+  # def profile_picture_url
+  #   @profile_picture_url ||= begin
+  #     hash = Digest::MD5.hexdigest(email)
+  #     "https://www.gravatar.com/avatar/#{hash}?d=wavatar"
+  #   end
+  # end
 
   def to_param
     username
@@ -91,6 +92,10 @@ class User < ApplicationRecord
   def login
     @login || username || email
   end
+  
+  # def role
+  #   username == "tandibi" ? :admin : :member
+  # end
 
   def self.find_authenticatable(login)
     where('username = :value OR email = :value', value: login).first

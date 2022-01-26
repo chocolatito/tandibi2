@@ -21,8 +21,16 @@
 #
 FactoryBot.define do
   factory :post do
-    user_id { "" }
+    # user_id { "" }
     thread_id { "" }
-    postable { nil }
+    #postable { nil }
+    user { create(:user) }
+    postable { create(:status) }
+    trait :with_replies do
+      replies { [
+        create(:post),
+        create(:post)
+      ] }
+    end
   end
 end
